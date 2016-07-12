@@ -1,0 +1,23 @@
+{
+  "name": "LTRequest",
+  "version": "0.1.0",
+  "summary": "个人数据请求工具",
+  "description": "个人数据请求工具",
+  "homepage": "https://github.com/yelon21/LTRequest",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "yelon21": "254956982@qq.com"
+  },
+  "source": {
+    "git": "https://github.com/yelon21/LTRequest.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "6.0"
+  },
+  "source_files": "LTRequest/Classes/**/*",
+  "public_header_files": "LTRequest/Classes/LTRequest/*.h"
+}

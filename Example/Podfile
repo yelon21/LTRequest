@@ -1,0 +1,12 @@
+use_frameworks!
+
+target 'LTRequest_Example' do
+  pod 'LTRequest', :path => '../'
+
+  target 'LTRequest_Tests' do
+    inherit! :search_paths
+
+
+  end
+#  pod 'LTTools/LTNS', :git => 'https://github.com/yelon21/LTToolsDemo.git'
+end
