@@ -19,5 +19,5 @@
     "ios": "6.0"
   },
   "source_files": "LTRequest/Classes/**/*",
-  "public_header_files": "LTRequest/Classes/LTRequest/*.h"
+  "public_header_files": "LTRequest/Classes/**/*.h"
 }

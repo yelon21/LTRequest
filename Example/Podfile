@@ -8,5 +8,6 @@ target 'LTRequest_Example' do
 
 
   end
-#  pod 'LTTools/LTNS', :git => 'https://github.com/yelon21/LTToolsDemo.git'
+
+#pod "LTRequest",:git => 'git@github.com:yelon21/LTRequest.git'
 end

@@ -11,18 +11,18 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Requirements
 
-<!--## Installation-->
-<!---->
-<!--LTRequest is available through [CocoaPods](http://cocoapods.org). To install-->
-<!--it, simply add the following line to your Podfile:-->
-<!---->
-<!--```ruby-->
-<!--pod "LTRequest"-->
-<!--```-->
+## Installation
+
+LTRequest is available through [CocoaPods](http://cocoapods.org). To install
+it, simply add the following line to your Podfile:
+
+```ruby
+pod "LTRequest"
+```
 
 ## Author
 
-yelon21, yl@yelon.cn
+yelon21, 254956982@qq.com
 
 ## License
 
