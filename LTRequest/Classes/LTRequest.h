@@ -16,10 +16,8 @@
 @property(nonatomic,strong) void (^_Nullable ProgressBlock)(double, double,NSData *_Nullable,NSData *_Nullable);
 @property(nonatomic,strong) void (^_Nullable ReponseBlock)(NSURLResponse *_Nullable, NSString *_Nullable);
 
-- (void)test:(NSString *_Nonnull)body;
-
 - (void)lt_setValue:(NSString * _Nonnull)value forHTTPHeaderField:(NSString * _Nonnull)field;
-- (void)addPostValue:(_Nonnull id <NSObject>)value forKey:( NSString * _Nonnull)key;
+- (void)lt_addPostValue:(_Nonnull id <NSObject>)value forKey:( NSString * _Nonnull)key;
 
 - (NSURLRequest  * _Nonnull)lt_postUrl:(NSString * _Nonnull)urlString
                               complete:(void (^_Nullable)(NSData *_Nullable responseData, NSString *_Nullable errorString))completeBlock;

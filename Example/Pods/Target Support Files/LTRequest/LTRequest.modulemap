@@ -1,6 +1,0 @@
-framework module LTRequest {
-  umbrella header "LTRequest-umbrella.h"
-
-  export *
-  module * { export * }
-}

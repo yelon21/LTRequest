@@ -14,10 +14,10 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = 'AC2B47F419A766A0E1AC5D7783DDD635'
+               BlueprintIdentifier = '84F0AD15E340A1463317487D4A677F3F'
                BlueprintName = 'LTRequest'
                ReferencedContainer = 'container:Pods.xcodeproj'
-               BuildableName = 'LTRequest.framework'>
+               BuildableName = 'libLTRequest.a'>
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

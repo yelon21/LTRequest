@@ -35,6 +35,7 @@ static NSOperationQueue *sharedQueue = nil;
     BOOL isURLSession;
     double expectedContentLength;
     BOOL isForResponse;
+    NSData *httpPostData;
 }
 @property(nonatomic,strong,readwrite)NSMutableURLRequest *request;
 @property(nonatomic,strong) NSURLConnection *connection;
@@ -67,22 +68,49 @@ static NSOperationQueue *sharedQueue = nil;
     return _httpHeaderDic;
 }
 
-- (void)test:(NSString *)body{
-
-}
-
 -(void)lt_setValue:(NSString *)value forHTTPHeaderField:(NSString *)field{
 
     self.httpHeaderDic[field] = value;
 }
 
-- (void)addPostValue:(id <NSObject>)value forKey:(NSString *)key{
+- (void)lt_addPostValue:(id <NSObject>)value forKey:(NSString *)key{
 
     if (!self.postData) {
         
         self.postData = [[NSMutableArray alloc]init];
     }
     [[self postData] addObject:@{@"key":key,@"value":[value description]}];
+}
+
+- (void)lt_setHttpBody:(NSData *)postData{
+
+    httpPostData = postData;
+}
+
+- (NSData *)postBodyData{
+
+    NSData *postBodyData = nil;
+    
+    if (httpPostData) {
+        
+        postBodyData = httpPostData;
+    }
+    else{
+    
+        NSMutableArray *postArgs = [[NSMutableArray alloc]init];
+        
+        for (NSDictionary *dic in self.postData) {
+            
+            NSString *argString = [NSString stringWithFormat:@"%@=%@",[dic[@"key"] lt_LTRequestEscapedValue],[dic[@"value"] lt_LTRequestEscapedValue]];
+            [postArgs addObject:argString];
+        }
+        NSLog(@"postArgs==%@",postArgs);
+        NSString *postBodyString = [postArgs componentsJoinedByString:@"&"];
+        NSLog(@"postBodyString==%@",postBodyString);
+        postBodyData = [postBodyString dataUsingEncoding:NSUTF8StringEncoding];
+    }
+    
+    return postBodyData;
 }
 
 - (NSURLRequest  * _Nonnull)lt_postUrl:(NSString * _Nonnull)urlString
@@ -121,17 +149,6 @@ static NSOperationQueue *sharedQueue = nil;
     self.ProgressBlock  = progressBlock;
     self.ReponseBlock   = responseBlock;
     
-    NSMutableArray *postArgs = [[NSMutableArray alloc]init];
-    for (NSDictionary *dic in self.postData) {
-        
-        NSString *argString = [NSString stringWithFormat:@"%@=%@",[dic[@"key"] lt_LTRequestEscapedValue],[dic[@"value"] lt_LTRequestEscapedValue]];
-        [postArgs addObject:argString];
-    }
-    NSLog(@"postArgs==%@",postArgs);
-    NSString *postBodyString = [postArgs componentsJoinedByString:@"&"];
-    NSLog(@"postBodyString==%@",postBodyString);
-    NSData *postBodyData = [postBodyString dataUsingEncoding:NSUTF8StringEncoding];
-    
     self.request = [[NSMutableURLRequest alloc]initWithURL:url];
     
     for (NSString *key in [self.httpHeaderDic allKeys]) {
@@ -140,7 +157,7 @@ static NSOperationQueue *sharedQueue = nil;
     }
     
     self.request.HTTPMethod = httpMethod?httpMethod:@"GET";
-    self.request.HTTPBody = postBodyData;
+    self.request.HTTPBody = [self postBodyData];
     
     Class urlSession = NSClassFromString(@"NSURLSession");
     if (urlSession) {
