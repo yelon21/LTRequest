@@ -8,6 +8,8 @@
 
 #import "LTRequest.h"
 
+//#define NSLog(fmt, ...) nil
+
 @interface NSString (LTRequest)
 
 //转换特殊字符
@@ -222,22 +224,42 @@ static NSOperationQueue *sharedQueue = nil;
     
     return NO;
 }
-- (void)connection:(NSURLConnection *)connection willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge{
-    NSLog(@"challenge==%@",challenge);
-}
+//- (void)connection:(NSURLConnection *)connection willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge{
+//    NSLog(@"challenge==%@",challenge);
+//}
 
 - (BOOL)connection:(NSURLConnection *)connection canAuthenticateAgainstProtectionSpace:(NSURLProtectionSpace *)protectionSpace {
     
     NSLog(@"protectionSpace==%@",protectionSpace);
-    return NO;
-    return [protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust];
+    if (self.supportSSL) {
+        
+        return [protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust];
+    }
+    else{
+        
+        return NO;
+    }
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
-    NSLog(@"challenge==%@",challenge);
-}
+//- (void)connection:(NSURLConnection *)connection didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
+//    NSLog(@"challenge==%@",challenge);
+//}
 - (void)connection:(NSURLConnection *)connection didCancelAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge {
     NSLog(@"challenge==%@",challenge);
+    
+    if (self.supportSSL) {
+        
+        if (challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust) {
+            
+            NSURLCredential *cre = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+            
+            [challenge.sender useCredential:cre forAuthenticationChallenge:challenge];
+        }
+    }
+    else{
+    
+        
+    }
 }
 
 #pragma mark NSURLConnectionDataDelegate
@@ -381,6 +403,43 @@ didCompleteWithError:(nullable NSError *)error{
         
             self.CompleteBlock(self.receiveData,nil);
         }
+    }
+}
+
+/* The last message a session receives.  A session will only become
+ * invalid because of a systemic error or when it has been
+ * explicitly invalidated, in which case the error parameter will be nil.
+ */
+- (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(nullable NSError *)error{
+
+    
+}
+
+/* If implemented, when a connection level authentication challenge
+ * has occurred, this delegate will be given the opportunity to
+ * provide authentication credentials to the underlying
+ * connection. Some types of authentication will apply to more than
+ * one request on a given connection to a server (SSL Server Trust
+ * challenges).  If this delegate message is not implemented, the
+ * behavior will be to use the default handling, which may involve user
+ * interaction.
+ */
+- (void)URLSession:(NSURLSession *)session
+didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
+ completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition disposition, NSURLCredential * _Nullable credential))completionHandler{
+    
+    if (self.supportSSL) {
+        
+        if (challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust) {
+            
+            NSURLCredential *cre = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+            // 调用block
+            completionHandler(NSURLSessionAuthChallengeUseCredential,cre);
+        }
+    }
+    else{
+    
+         completionHandler(NSURLSessionAuthChallengePerformDefaultHandling,nil);
     }
 }
 

@@ -12,12 +12,15 @@
 
 @property(nonatomic,strong,readonly,nullable) NSMutableURLRequest *request;
 
+@property(nonatomic,assign) BOOL supportSSL;
+
 @property(nonatomic,strong) void (^_Nullable CompleteBlock)(NSData *_Nullable, NSString *_Nullable);
 @property(nonatomic,strong) void (^_Nullable ProgressBlock)(double, double,NSData *_Nullable,NSData *_Nullable);
 @property(nonatomic,strong) void (^_Nullable ReponseBlock)(NSURLResponse *_Nullable, NSString *_Nullable);
 
 - (void)lt_setValue:(NSString * _Nonnull)value forHTTPHeaderField:(NSString * _Nonnull)field;
 - (void)lt_addPostValue:(_Nonnull id <NSObject>)value forKey:( NSString * _Nonnull)key;
+- (void)lt_setHttpBody:(NSData * _Nonnull)postData;
 
 - (NSURLRequest  * _Nonnull)lt_postUrl:(NSString * _Nonnull)urlString
                               complete:(void (^_Nullable)(NSData *_Nullable responseData, NSString *_Nullable errorString))completeBlock;
